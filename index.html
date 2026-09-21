@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="勝ち勝ちWeb" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <title>勝ち勝ちくん Web</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="tabs" aria-label="モード切り替え">
+      <button class="tab active" data-tab="A">A</button>
+      <button class="tab" data-tab="B">B</button>
+      <button class="tab" data-tab="C">C</button>
+    </header>
+
+    <section class="games-card">
+      <label>開始G<input id="startG" inputmode="numeric" type="number" min="0" step="1" /></label>
+      <div class="current-block">
+        <label>現在G<input id="currentG" inputmode="numeric" type="number" min="0" step="1" /></label>
+        <div class="quick-row">
+          <button id="add100">+100</button>
+          <button id="add1000">+1000</button>
+        </div>
+      </div>
+      <div class="game-summary"><span>実戦G</span><strong id="playG">0</strong></div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>上段</h2><span>タップ +1 ／ 長押し 直接入力</span></div>
+      <div id="upperCounters" class="counter-grid"></div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>下段</h2><span>タップ +1 ／ 長押し 直接入力</span></div>
+      <div id="lowerCounters" class="counter-grid"></div>
+    </section>
+
+    <section id="linkPanel" class="panel hidden">
+      <div class="panel-head"><strong>LINK</strong><span>下段 ÷ 上段</span></div>
+      <div id="linkGrid" class="mini-grid"></div>
+    </section>
+
+    <section id="sumPanel" class="panel hidden">
+      <div class="panel-head"><strong>合算</strong><span id="sumResult">—</span></div>
+      <div id="sumChoices" class="sum-grid"></div>
+    </section>
+
+    <nav class="action-row">
+      <button id="minusBtn">− 訂正</button>
+      <button id="sumBtn">合算</button>
+      <button id="linkBtn">LINK</button>
+      <button id="settingsBtn">設定</button>
+    </nav>
+
+    <section id="settingsPanel" class="panel hidden settings">
+      <label class="toggle-row">
+        <span class="toggle-copy"><span>タップ時の振動</span><small>対応端末のみ</small></span>
+        <input id="vibrationToggle" type="checkbox" />
+      </label>
+      <label class="toggle-row">
+        <span class="toggle-copy"><span>画面ON</span><small>対応ブラウザではスリープを防止</small></span>
+        <input id="wakeToggle" type="checkbox" />
+      </label>
+      <div class="reset-row">
+        <button id="resetCurrent">この台をリセット</button>
+        <button id="resetAll">全台リセット</button>
+      </div>
+    </section>
+
+    <p id="status" class="status" aria-live="polite"></p>
+  </main>
+
+  <dialog id="editDialog">
+    <form method="dialog" id="editForm">
+      <h3 id="editTitle">回数を直接入力</h3>
+      <input id="editInput" inputmode="numeric" type="number" min="0" max="1999" step="1" />
+      <div class="dialog-actions">
+        <button value="cancel">キャンセル</button>
+        <button id="editSave" value="default">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
