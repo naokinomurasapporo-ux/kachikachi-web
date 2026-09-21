@@ -2,6 +2,7 @@
   const STORAGE_KEY = 'kachikachi-web-v1';
   const COLORS = ['white','red','green','yellow'];
   const LABELS = ['白','赤','緑','黄'];
+  const DISPLAY_ORDER = [2,1,3,0]; // 緑・赤・黄・白
 
   const blankTab = () => ({
     startG: 0,
@@ -95,7 +96,7 @@
 
   function ratioLabel(count){
     const g = playGames();
-    if (g <= 0) return '確率 —（実戦Gなし）';
+    if (g <= 0) return '確率 —';
     if (count <= 0) return '確率 —';
     return `確率 ${ratio(count)}`;
   }
@@ -127,7 +128,8 @@
 
   function renderCounters(container, which){
     container.innerHTML = '';
-    COLORS.forEach((color,i) => {
+    DISPLAY_ORDER.forEach((i) => {
+      const color = COLORS[i];
       const count = tab()[which][i];
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -242,7 +244,7 @@
     $('linkPanel').classList.toggle('hidden', !on);
     if (!on) return;
     $('linkGrid').innerHTML = '';
-    COLORS.forEach((_,i) => {
+    DISPLAY_ORDER.forEach((i) => {
       const up = tab().upper[i];
       const down = tab().lower[i];
       const pct = up > 0 ? `${((down/up)*100).toFixed(1)}%` : '—';
@@ -259,7 +261,7 @@
     if (!on) return;
     $('sumChoices').innerHTML = '';
 
-    ['upper','lower'].forEach(which => COLORS.forEach((_,i) => {
+    ['upper','lower'].forEach(which => DISPLAY_ORDER.forEach((i) => {
       const id = `${which}-${i}`;
       const label = document.createElement('label');
       label.className = 'sum-choice';
