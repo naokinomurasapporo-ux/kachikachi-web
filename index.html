@@ -27,6 +27,8 @@
       <div class="current-block">
         <label>現在G<input id="currentG" inputmode="numeric" type="number" min="0" step="1" /></label>
         <div class="quick-row">
+          <button id="add10">+10</button>
+          <button id="add50">+50</button>
           <button id="add100">+100</button>
           <button id="add1000">+1000</button>
         </div>
@@ -67,6 +69,10 @@
       <label class="toggle-row">
         <span class="toggle-copy"><span>画面ON</span><small>対応ブラウザではスリープを防止</small></span>
         <input id="wakeToggle" type="checkbox" />
+      </label>
+      <label class="font-size-row">
+        <span class="toggle-copy"><span>確率文字サイズ</span><small><span id="ratioFontValue">13</span>px</small></span>
+        <input id="ratioFontRange" type="range" min="10" max="20" step="1" />
       </label>
       <div class="reset-row">
         <button id="resetCurrent">この台をリセット</button>
