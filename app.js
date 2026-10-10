@@ -15,7 +15,7 @@
   const defaultState = () => ({
     active: 'A',
     tabs: { A: blankTab(), B: blankTab(), C: blankTab() },
-    settings: { vibration: true, wake: true }
+    settings: { vibration: true, wake: true, ratioFontSize: 13 }
   });
 
   function clampInt(v,max=999999){
@@ -53,7 +53,8 @@
       },
       settings: {
         vibration: raw.settings?.vibration !== false,
-        wake: raw.settings?.wake !== false
+        wake: raw.settings?.wake !== false,
+        ratioFontSize: Math.max(10, Math.min(20, Number(raw.settings?.ratioFontSize) || 13))
       }
     };
   }
@@ -116,6 +117,9 @@
     playG.textContent = playGames();
     $('vibrationToggle').checked = !!state.settings.vibration;
     $('wakeToggle').checked = !!state.settings.wake;
+    $('ratioFontRange').value = state.settings.ratioFontSize;
+    $('ratioFontValue').textContent = state.settings.ratioFontSize;
+    document.documentElement.style.setProperty('--ratio-font-size', state.settings.ratioFontSize + 'px');
     $('minusBtn').classList.toggle('active', minusMode);
     $('sumBtn').classList.toggle('active', tab().ui.sumMode);
     $('linkBtn').classList.toggle('active', tab().ui.linkMode);
@@ -321,6 +325,25 @@
   startG.addEventListener('input', updateGamesFromInputs);
   currentG.addEventListener('input', updateGamesFromInputs);
 
+
+  $('add10').addEventListener('click', () => {
+    const base = Math.max(tab().currentG, tab().startG);
+    tab().currentG = Math.min(999999, base + 10);
+    vibrate();
+    render();
+    setStatus('現在Gを+10しました');
+  });
+
+
+  $('add50').addEventListener('click', () => {
+    const base = Math.max(tab().currentG, tab().startG);
+    tab().currentG = Math.min(999999, base + 50);
+    vibrate();
+    render();
+    setStatus('現在Gを+50しました');
+  });
+
+
   $('add100').addEventListener('click', () => {
     const base = Math.max(tab().currentG, tab().startG);
     tab().currentG = Math.min(999999, base + 100);
@@ -329,6 +352,7 @@
     setStatus('現在Gを+100しました');
   });
 
+
   $('add1000').addEventListener('click', () => {
     const base = Math.max(tab().currentG, tab().startG);
     tab().currentG = Math.min(999999, base + 1000);
@@ -336,6 +360,7 @@
     render();
     setStatus('現在Gを+1000しました');
   });
+
 
   $('minusBtn').addEventListener('click', () => {
     minusMode = !minusMode;
@@ -365,6 +390,13 @@
     state.settings.wake = e.target.checked;
     save();
     await syncWakeLock();
+  });
+
+  $('ratioFontRange').addEventListener('input', (e) => {
+    state.settings.ratioFontSize = Math.max(10, Math.min(20, Number(e.target.value) || 13));
+    $('ratioFontValue').textContent = state.settings.ratioFontSize;
+    document.documentElement.style.setProperty('--ratio-font-size', state.settings.ratioFontSize + 'px');
+    save();
   });
 
   $('resetCurrent').addEventListener('click', () => {
@@ -406,7 +438,7 @@
   });
 
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').then(reg => reg.update()).catch(() => {}));
   }
 
   render();
